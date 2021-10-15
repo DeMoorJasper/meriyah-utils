@@ -3,7 +3,7 @@ import path from "path";
 import * as meriyah from "meriyah";
 import * as globby from "globby";
 
-import { generate } from "../index";
+import { generate } from "../src/index";
 
 function testFixture(filepath: string, skipInvalid: boolean = false) {
   const input = fs.readFileSync(filepath, "utf-8");
