@@ -1,21 +1,5 @@
-# Meriyah Printer
+# Meriyah utils
 
-Tiny and fast JavaScript code generator that is compatible with all browser-supported nodes meriyah produces, fork of the `astring` library.
+A collection of utilities to work with the meriyah ast.
 
-## Usage
-
-```JS
-import * as meriyah from 'meriyah';
-import { generate } from 'meriyah-printer';
-
-const ast = meriyah.parseModule(code, {
-  module: true,
-  webcompat: true,
-  directives: true,
-  next: true,
-  raw: true,
-  jsx: true,
-});
-
-const code = generate(ast);
-```
+The main goal of these utils is to serve as a faster alternative to Babel for spec compliant javascript code.
