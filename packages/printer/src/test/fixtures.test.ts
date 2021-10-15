@@ -3,7 +3,7 @@ import path from "path";
 import * as meriyah from "meriyah";
 import * as globby from "globby";
 
-import { generate } from "../src/index";
+import { generate } from "../index";
 
 function testFixture(filepath: string, skipInvalid: boolean = false) {
   const input = fs.readFileSync(filepath, "utf-8");
@@ -69,10 +69,10 @@ describe("test262-parser-tests", () => {
     "f5b89028dfa29f27.js",
     "f7f611e6fdb5b9fc.js",
   ]);
-  const TEST_262_DIR = path.join(
-    __dirname,
-    "../node_modules/test262-parser-tests/pass"
+  const TEST_262_MODULE_DIR = path.dirname(
+    require.resolve("test262-parser-tests/package.json")
   );
+  const TEST_262_DIR = path.join(TEST_262_MODULE_DIR, "pass");
   const fixtures = globby
     .sync("**.js", {
       cwd: TEST_262_DIR,
