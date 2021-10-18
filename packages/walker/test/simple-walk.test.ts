@@ -1,5 +1,5 @@
 import { ESTree } from "meriyah";
-import { simpleWalk } from "../src/simple-walk";
+import { simpleWalk } from "../src/index";
 
 describe("Simple Walk", () => {
   it("walks an AST", () => {

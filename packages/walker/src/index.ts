@@ -10,3 +10,5 @@ export function walk(ast: ESTree.Program, { enter, leave }: SyncWalkHandlers) {
   const instance = new SyncWalker(enter, leave);
   return instance.visit(ast, null);
 }
+
+export { simpleWalk } from "./simple-walk";
