@@ -10,7 +10,8 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "declaration": true
   },
   "exclude": ["node_modules", "dist", "test"]
 }
