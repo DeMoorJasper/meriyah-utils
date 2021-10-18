@@ -1,7 +1,7 @@
 import { ESTree } from "meriyah";
 import { walk } from "../src/index";
 
-describe("sync estree-walker", () => {
+describe("Sync walk", () => {
   it("walks a malformed node", () => {
     const block = [
       {
