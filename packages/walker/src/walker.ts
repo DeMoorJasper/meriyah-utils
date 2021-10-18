@@ -23,9 +23,9 @@ export class WalkerBase {
     };
   }
 
-  replace(parent: any, prop: string, index: number, node: ESTree.Node) {
+  replace(parent: any, prop: string, index: number | null | undefined, node: ESTree.Node) {
     if (parent) {
-      if (index !== null) {
+      if (index != null) {
         parent[prop][index] = node;
       } else {
         parent[prop] = node;
@@ -33,9 +33,9 @@ export class WalkerBase {
     }
   }
 
-  remove(parent: any, prop: string, index: number) {
+  remove(parent: any, prop: string, index: number | null | undefined) {
     if (parent) {
-      if (index !== null) {
+      if (index != null) {
         parent[prop].splice(index, 1);
       } else {
         delete parent[prop];

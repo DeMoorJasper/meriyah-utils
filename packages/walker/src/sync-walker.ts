@@ -4,9 +4,9 @@ import type { ESTree } from "meriyah";
 export type SyncHandler = (
   this: WalkerContext,
   node: ESTree.Node,
-  parent: ESTree.Node,
-  key: string,
-  index: number
+  parent: ESTree.Node | null,
+  key: string | null,
+  index: number | null
 ) => void;
 
 export class SyncWalker extends WalkerBase {
@@ -22,8 +22,8 @@ export class SyncWalker extends WalkerBase {
   visit(
     node: ESTree.Node,
     parent: ESTree.Node | null,
-    prop?: string,
-    index?: number
+    prop?: string | null | undefined,
+    index?: number | null | undefined
   ) {
     if (node) {
       if (this.enter) {
@@ -38,11 +38,11 @@ export class SyncWalker extends WalkerBase {
 
         if (this.replacement) {
           node = this.replacement;
-          this.replace(parent, prop, index, node);
+          this.replace(parent, prop as string, index, node);
         }
 
         if (this.should_remove) {
-          this.remove(parent, prop, index);
+          this.remove(parent, prop as string, index);
         }
 
         const skipped = this.should_skip;
@@ -85,11 +85,11 @@ export class SyncWalker extends WalkerBase {
 
         if (this.replacement) {
           node = this.replacement;
-          this.replace(parent, prop, index, node);
+          this.replace(parent, prop as string, index, node);
         }
 
         if (this.should_remove) {
-          this.remove(parent, prop, index);
+          this.remove(parent, prop as string, index);
         }
 
         const removed = this.should_remove;

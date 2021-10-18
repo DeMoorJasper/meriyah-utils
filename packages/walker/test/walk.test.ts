@@ -1,3 +1,4 @@
+import { ESTree } from "meriyah";
 import { walk } from "../src/index";
 
 describe("sync estree-walker", () => {
@@ -21,7 +22,7 @@ describe("sync estree-walker", () => {
       // @ts-ignore
       { type: "Test", block },
       {
-        enter(node) {
+        enter(node, ...params) {
           // @ts-ignore
           if (node.type === "Answer") {
             answer = node;
@@ -56,8 +57,8 @@ describe("sync estree-walker", () => {
       sourceType: "module",
     };
 
-    let entered = [];
-    let left = [];
+    let entered: ESTree.Node[] = [];
+    let left: ESTree.Node[] = [];
 
     // @ts-ignore
     walk(ast, {
@@ -168,7 +169,7 @@ describe("sync estree-walker", () => {
       sourceType: "module",
     };
 
-    const identifiers = [];
+    const identifiers: string[] = [];
 
     // @ts-ignore
     walk(ast, {
@@ -358,7 +359,7 @@ describe("sync estree-walker", () => {
         sourceType: "module",
       };
 
-      const visitedIndex = [];
+      const visitedIndex: number[] = [];
 
       // @ts-ignore
       walk(ast, {
