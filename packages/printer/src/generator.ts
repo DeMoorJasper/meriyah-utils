@@ -731,7 +731,7 @@ export const GENERATOR = {
     formatSequence(state, node["arguments"]);
   },
   PrivateIdentifier(node: ESTree.PrivateIdentifier, state: State) {
-    state.write("#" + node.name);
+    state.write(node.name);
   },
   PropertyDefinition(node: ESTree.PropertyDefinition, state: State) {
     if (node.static) {
