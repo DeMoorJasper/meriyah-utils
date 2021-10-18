@@ -8,8 +8,8 @@
     "packages/*"
   ],
   "scripts": {
-    "typecheck": "lerna run typecheck --stream",
-    "test": "lerna run test --stream",
+    "typecheck": "lerna run typecheck --stream --concurrency 1",
+    "test": "lerna run test --stream --concurrency 1",
     "build": "lerna run build --stream"
   },
   "devDependencies": {
