@@ -4,6 +4,9 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist",
     "src",
