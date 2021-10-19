@@ -49,14 +49,16 @@ describe("Simple Walk", () => {
       sourceType: "module",
     };
 
-    let entered: ESTree.Node[] = [];
+    let nodes: ESTree.Node[] = [];
+    let parents: (ESTree.Node | null)[] = [];
 
     // @ts-ignore
-    simpleWalk(ast, (node) => {
-      entered.push(node);
+    simpleWalk(ast, (node, parent) => {
+      nodes.push(node);
+      parents.push(parent);
     });
 
-    expect(entered).toEqual([
+    expect(nodes).toEqual([
       ast,
       ast.body[0],
       ast.body[0].declarations[0],
@@ -69,6 +71,21 @@ describe("Simple Walk", () => {
       ast.body[0].something.expression,
       ast.body[0].something.expression.left,
       ast.body[0].something.expression.right,
+    ]);
+
+    expect(parents).toEqual([
+      null,
+      ast,
+      ast.body[0],
+      ast.body[0].declarations[0],
+      ast.body[0].declarations[0],
+      ast.body[0],
+      ast.body[0].declarations[1],
+      ast.body[0].declarations[1],
+      ast.body[0],
+      ast.body[0].something,
+      ast.body[0].something.expression,
+      ast.body[0].something.expression,
     ]);
   });
 
@@ -106,19 +123,29 @@ describe("Simple Walk", () => {
       sourceType: "module",
     };
 
-    let entered: ESTree.Node[] = [];
+    let nodes: ESTree.Node[] = [];
+    let parents: (ESTree.Node | null)[] = [];
 
     // @ts-ignore
-    simpleWalk(ast, (node) => {
-      entered.push(node);
+    simpleWalk(ast, (node, parent) => {
+      nodes.push(node);
+      parents.push(parent);
     });
 
-    expect(entered).toEqual([
+    expect(nodes).toEqual([
       ast,
       ast.body[0],
       ast.body[0].expression,
       ast.body[1],
       ast.body[1].expression,
+    ]);
+
+    expect(parents).toEqual([
+      null,
+      ast,
+      ast.body[0],
+      ast,
+      ast.body[1],
     ]);
   });
 
@@ -155,14 +182,14 @@ describe("Simple Walk", () => {
       sourceType: "module",
     };
 
-    let entered: ESTree.Node[] = [];
+    let nodes: ESTree.Node[] = [];
 
     // @ts-ignore
     simpleWalk(ast, (node) => {
-      entered.push(node);
+      nodes.push(node);
       return node.type === "BinaryExpression";
     });
 
-    expect(entered).toEqual([ast, ast.body[0], ast.body[0].expression]);
+    expect(nodes).toEqual([ast, ast.body[0], ast.body[0].expression]);
   });
 });
