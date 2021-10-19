@@ -1,6 +1,6 @@
 {
   "name": "@meriyah-utils/walker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "license": "MIT",
