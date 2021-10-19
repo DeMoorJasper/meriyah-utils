@@ -19,9 +19,9 @@ function parseModule(code) {
 
 // Runs the benchmark and returns the timing for a certain code string
 function runTest(code, times = 20) {
-  const ast = parseModule(code);
   const timings = [];
   for (let i = 0; i < times; i++) {
+    const ast = parseModule(code);
     const startTime = Date.now();
     convertEsModule(ast);
     timings.push(Date.now() - startTime);
