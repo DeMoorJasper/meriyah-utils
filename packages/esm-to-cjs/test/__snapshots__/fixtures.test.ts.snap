@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Fixtures fixture: var-naming/class-properties.js 1`] = `
+exports[`Fixtures fixture: class-properties.js 1`] = `
 "exports.LocalFontSource = void 0;
 Object.defineProperty(exports, \\"__esModule\\", {
   value: true
@@ -19,6 +19,7 @@ class LocalFontSource {
   }
   test() {
     this.React_default = \\"another-react\\";
+    (0, $csb___fonts_js.typefaceAliases)();
     return this.typefaceAliases;
   }
 }
@@ -31,11 +32,35 @@ function $_csb__interopRequireDefault(obj) {
 "
 `;
 
-exports[`Fixtures fixture: var-naming/function-args.js 1`] = `
+exports[`Fixtures fixture: function-args.js 1`] = `
 "var $csb__lodash = require(\\"lodash\\");
 var Lodash = $csb__lodash;
 function doSomething(Lodash) {
   return Lodash.flatten([]);
 }
+"
+`;
+
+exports[`Fixtures fixture: scoped-exports.js 1`] = `
+"Object.defineProperty(exports, \\"__esModule\\", {
+  value: true
+});
+var $csb__react = require(\\"react\\");
+var __$csb_exports = [];
+function test(__$csb_exports) {
+  return __$csb_exports;
+}
+__$csb_exports.push(\\"test\\");
+Object.keys($csb__react).forEach(function (key) {
+  if (key === \\"default\\" || key === \\"__esModule\\") return;
+  if (Object.prototype.hasOwnProperty.call(exports, key)) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    configurable: true,
+    get: function $csbGet() {
+      return $csb__react[key];
+    }
+  });
+});
 "
 `;

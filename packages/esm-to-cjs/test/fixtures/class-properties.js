@@ -13,6 +13,8 @@ export class LocalFontSource {
   test() {
     this.React_default = "another-react";
 
+    typefaceAliases();
+
     return this.typefaceAliases;
   }
 }

@@ -113,6 +113,16 @@ function test2(a) {
     a();
   }
 }
+class Test {
+  a;
+
+  cosntructor() {
+    this.a();
+  }
+  something(a) {
+    a();
+  }
+}
 "
 `;
 

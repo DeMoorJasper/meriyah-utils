@@ -85,10 +85,23 @@ describe("convert-esmodule", () => {
       function test1() {
         a();
       }
+
       function test2(a) {
         a();
 
         function test3() {
+          a();
+        }
+      }
+
+      class Test {
+        a;
+
+        cosntructor() {
+          this.a();
+        }
+
+        something(a) {
           a();
         }
       }

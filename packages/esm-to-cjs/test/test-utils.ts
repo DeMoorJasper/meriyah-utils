@@ -18,5 +18,7 @@ export function parseModule(code: string): meriyah.ESTree.Program {
 export function convertEsModule(code: string) {
   const ast = parseModule(code);
   convert(ast);
-  return generateCode(ast);
+  const result = generateCode(ast);
+  console.log(result);
+  return result;
 }
