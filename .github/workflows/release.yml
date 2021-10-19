@@ -9,14 +9,14 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
       - name: Install dependencies
         run: yarn
       - name: Build
         run: yarn build
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
         env:
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm whoami
       - name: Prepare | Lerna Version
         run: yarn lerna version --create-release github --yes
