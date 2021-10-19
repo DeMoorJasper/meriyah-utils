@@ -1,6 +1,6 @@
 {
   "name": "@meriyah-utils/esm-to-cjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "license": "MIT",
@@ -17,12 +17,12 @@
     "benchmark": "node ./benchmark/index.js"
   },
   "dependencies": {
-    "@meriyah-utils/types": "^1.0.0",
-    "@meriyah-utils/walker": "^1.0.0",
+    "@meriyah-utils/types": "^1.0.1",
+    "@meriyah-utils/walker": "^1.0.1",
     "escope": "^3.6.0"
   },
   "devDependencies": {
-    "meriyah": "^4.2.0",
-    "globby": "^11.0.4"
+    "globby": "^11.0.4",
+    "meriyah": "^4.2.0"
   }
 }

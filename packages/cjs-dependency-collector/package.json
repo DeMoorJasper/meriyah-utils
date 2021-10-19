@@ -1,6 +1,6 @@
 {
   "name": "@meriyah-utils/cjs-dependency-collector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "license": "MIT",
@@ -16,11 +16,11 @@
     "build": "tsc -b tsconfig.build.json"
   },
   "dependencies": {
-    "@meriyah-utils/walker": "^1.0.0",
-    "@meriyah-utils/types": "^1.0.0"
+    "@meriyah-utils/types": "^1.0.1",
+    "@meriyah-utils/walker": "^1.0.1"
   },
   "devDependencies": {
-    "meriyah": "^4.2.0",
-    "@meriyah-utils/printer": "^1.0.0"
+    "@meriyah-utils/printer": "^1.0.1",
+    "meriyah": "^4.2.0"
   }
 }
