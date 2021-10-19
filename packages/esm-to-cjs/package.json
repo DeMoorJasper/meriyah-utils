@@ -13,7 +13,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "jest --runInBand --verbose",
-    "build": "tsc -b tsconfig.build.json"
+    "build": "tsc -b tsconfig.build.json",
+    "benchmark": "node ./benchmark/index.js"
   },
   "dependencies": {
     "@meriyah-utils/types": "^1.0.0",
@@ -21,6 +22,7 @@
     "escope": "^3.6.0"
   },
   "devDependencies": {
-    "meriyah": "^4.2.0"
+    "meriyah": "^4.2.0",
+    "globby": "^11.0.4"
   }
 }

@@ -1,44 +1,22 @@
 import fs from "fs";
 import path from "path";
-import * as meriyah from "meriyah";
-import { generate as generateCode } from "@meriyah-utils/printer";
-import { convertEsModule as convert } from "../src/index";
+import { convertEsModule } from "./test-utils";
 
-function parseModule(code: string): meriyah.ESTree.Program {
-  return meriyah.parseModule(code, {
-    module: true,
-    webcompat: true,
-    directives: false,
-    next: true,
-    raw: true,
-    jsx: true,
-    loc: false,
-    ranges: false,
-  });
-}
-
-function convertEsModule(code: string) {
-  const ast = parseModule(code);
-  convert(ast);
-  const result = {
-    code: generateCode(ast),
-  };
-  return result;
-}
+const FIXTURES_DIR = path.join(__dirname, "fixtures");
 
 describe("convert-esmodule", () => {
   it("can convert reexports", () => {
     const code = `
       export * from './test/store.js';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert normal exports", () => {
     const code = `
       export { test, test2 } from './test/store.js';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert function exports", () => {
@@ -47,35 +25,35 @@ describe("convert-esmodule", () => {
       export const test2 = () => {}
       export class Test {}
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert imports with spaces", () => {
     const code = `
       import aTest from 'a test';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert default exports", () => {
     const code = `
       export default function test() {}
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert class default exports", () => {
     const code = `
       export default class A {}
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert weird default exports", () => {
     const code = `
       export default a = 'b';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert default imports", () => {
@@ -84,7 +62,7 @@ describe("convert-esmodule", () => {
 
       a();
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert named imports", () => {
@@ -95,7 +73,7 @@ describe("convert-esmodule", () => {
       b();
       c();
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert named imports with different scopes", () => {
@@ -116,7 +94,7 @@ describe("convert-esmodule", () => {
       }
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can handle as imports", () => {
@@ -125,14 +103,14 @@ describe("convert-esmodule", () => {
 
       const func = b();
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("ignores comments", () => {
     const code = `
       // import { a as b } from './b';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can handle inline comments", () => {
@@ -142,7 +120,7 @@ describe("convert-esmodule", () => {
       b();
       c();
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can handle class properties", () => {
@@ -157,7 +135,7 @@ describe("convert-esmodule", () => {
         static d = ''
       }
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can handle async code", () => {
@@ -167,7 +145,7 @@ describe("convert-esmodule", () => {
         const test = await test2()
       }
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can handle block scopes", () => {
@@ -180,7 +158,7 @@ describe("convert-esmodule", () => {
     e();
 
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles export mutations", () => {
@@ -189,14 +167,14 @@ describe("convert-esmodule", () => {
 
       test = 5;
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles export mutations with no named function", () => {
     const code = `
       export default function() {}
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles export mutations with variables", () => {
@@ -211,7 +189,7 @@ describe("convert-esmodule", () => {
       to = "test"
     }
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("doesn't remove object initializers", () => {
@@ -224,21 +202,21 @@ describe("convert-esmodule", () => {
      is()
     };
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("doesn't set var definitions", () => {
     const code = `
     export var global = typeof window !== 'undefined' ? window : {};
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles default as exports", () => {
     const code = `
     export { default as Field } from './Field';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles named exports", () => {
@@ -246,7 +224,7 @@ describe("convert-esmodule", () => {
     const a = 'c';
     export { a };
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles re-exports in named exports", () => {
@@ -254,14 +232,14 @@ describe("convert-esmodule", () => {
     import { a } from './b';
     export { a };
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("generates parseable var name with @", () => {
     const code = `
     import { a } from './a-@kjaw';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles concurrent import and exports", () => {
@@ -272,7 +250,7 @@ describe("convert-esmodule", () => {
     var a = () => _a;
     export { a };
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles re-exports in named exports with a alias", () => {
@@ -281,7 +259,7 @@ describe("convert-esmodule", () => {
     const c = 'test';
     export { a as b, c };
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles default imports", () => {
@@ -290,14 +268,14 @@ describe("convert-esmodule", () => {
 
     console.log(React.Component);
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles multiple var exports", () => {
     const code = `
     export const a = 5, b = 6;
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles multiple aliased exports", () => {
@@ -311,7 +289,7 @@ describe("convert-esmodule", () => {
     b.test();
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("converts object shorthands", () => {
@@ -320,7 +298,7 @@ describe("convert-esmodule", () => {
 
     const short = { templateFactory };
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("hoists imports at bottom", () => {
@@ -329,7 +307,7 @@ describe("convert-esmodule", () => {
 
     import PropTypes from 'prop-types';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("works with variables that are named exports", () => {
@@ -338,7 +316,7 @@ describe("convert-esmodule", () => {
     exports.push('test');
     export default exports;
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("exports that are not on the root scope are not renamed", () => {
@@ -347,7 +325,7 @@ describe("convert-esmodule", () => {
       var exports = 'blaat';
     }
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("renames exports that are already defined, even in block scope", () => {
@@ -357,7 +335,7 @@ describe("convert-esmodule", () => {
       exports = 'blaat';
     }
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("does empty exports", () => {
@@ -366,7 +344,7 @@ describe("convert-esmodule", () => {
     export { EuiDataGrid } from './data_grid';
     export * from './data_grid_types';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("changes default imports inline", () => {
@@ -376,7 +354,7 @@ describe("convert-esmodule", () => {
     rgb.a;
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("keeps import order", () => {
@@ -384,28 +362,13 @@ describe("convert-esmodule", () => {
     import '1';
     import '2';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("parses and writes chars with linebreaks", () => {
     const code =
       "var WS_CHARS = 'u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff'";
-    expect(convertEsModule(code).code).toMatchSnapshot();
-  });
-
-  it("Has good performance", () => {
-    /* eslint-disable */
-    const code = fs.readFileSync(
-      path.join(__dirname, "fixtures/framer.js"),
-      "utf-8"
-    );
-    for (let i = 0; i < 5; i++) {
-      const t = Date.now();
-      const ast = parseModule(code);
-      convert(ast);
-      console.log(`Converting ESM to CommonJS took: ${Date.now() - t}ms`);
-    }
-    /* eslint-enable */
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles import statement after default export", () => {
@@ -416,7 +379,7 @@ describe("convert-esmodule", () => {
     import { bpfrpt_proptype_OverscanIndicesGetterParams } from './types';
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles assignments and exports at the same time", () => {
@@ -424,7 +387,7 @@ describe("convert-esmodule", () => {
     export const {Ease: C, Linear, Power0, Power1, Power2, Power3, Power4, TweenPlugin} = _gsScope;
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles export object", () => {
@@ -432,7 +395,7 @@ describe("convert-esmodule", () => {
     export {a, b, c};
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("handles export alias", () => {
@@ -440,7 +403,7 @@ describe("convert-esmodule", () => {
     export {Subscription as default};
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("can convert exports containing overlapping exports", () => {
@@ -448,7 +411,7 @@ describe("convert-esmodule", () => {
       export * from './some.js';
       export { default as some } from './some.js';
     `;
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   // TODO: We should probably also have asyncDeps in the result?
@@ -457,7 +420,7 @@ describe("convert-esmodule", () => {
     import('test');
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("defines its exports before requires", () => {
@@ -469,7 +432,7 @@ describe("convert-esmodule", () => {
     }
     `;
 
-    expect(convertEsModule(code).code).toMatchSnapshot();
+    expect(convertEsModule(code)).toMatchSnapshot();
   });
 
   it("retains the order of re-exports", () => {
@@ -484,12 +447,12 @@ describe("convert-esmodule", () => {
     `;
 
     const result = convertEsModule(code);
-    expect(result.code).toMatchSnapshot();
-    expect(result.code.indexOf("tfjs-core")).toBeLessThan(
-      result.code.indexOf("tfjs-data")
+    expect(result).toMatchSnapshot();
+    expect(result.indexOf("tfjs-core")).toBeLessThan(
+      result.indexOf("tfjs-data")
     );
-    expect(result.code.indexOf("tfjs-core")).toBeLessThan(
-      result.code.indexOf("tfjs-layers")
+    expect(result.indexOf("tfjs-core")).toBeLessThan(
+      result.indexOf("tfjs-layers")
     );
   });
 
@@ -499,7 +462,7 @@ describe("convert-esmodule", () => {
     import * as data from '@tensorflow/tfjs-data';
     `;
 
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
     expect(result.indexOf("tfjs-core")).toBeLessThan(
       result.indexOf("tfjs-data")
@@ -515,7 +478,7 @@ describe("convert-esmodule", () => {
     import * as data from '@tensorflow/tfjs-data';
     `;
 
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result.indexOf("function a")).toBeGreaterThan(
       result.indexOf("tfjs-data")
     );
@@ -533,7 +496,7 @@ describe("convert-esmodule", () => {
       export { c } from './a';
       export * as data from './b';
     `;
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
     expect(result.indexOf("function a")).toBeGreaterThan(result.indexOf("./a"));
     expect(result.indexOf("function a")).toBeGreaterThan(result.indexOf("./b"));
@@ -546,7 +509,7 @@ describe("convert-esmodule", () => {
     export { a } from './test';
     export * from "./containers";
     `;
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
     expect(result.indexOf("./containers")).toBeGreaterThan(
       result.indexOf("./withSearch")
@@ -561,7 +524,7 @@ export function test3() {
 }
     `;
 
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
   });
 
@@ -574,7 +537,7 @@ export function test3() {
 
     `;
 
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
   });
 
@@ -593,7 +556,7 @@ export function test3() {
       export { k as l } from './foo';
       export { m as default } from './foo';
     `;
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
   });
 
@@ -602,7 +565,7 @@ export function test3() {
       export default function h() {};
       export default (class {});
     `;
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
   });
 
@@ -615,62 +578,7 @@ export function test3() {
     export const [x, y] = a();
     `;
 
-    const result = convertEsModule(code).code;
-    expect(result).toMatchSnapshot();
-  });
-
-  it("can handle class properties and named imports with same name", () => {
-    const code = `
-    import { typefaceAliases } from "./fonts.js";
-
-    export class LocalFontSource {
-      typefaceAliases;
-      
-      constructor() {
-        this.typefaceAliases = new Map();
-      }
-      
-      test() {
-        console.log(this.typefaceAliases);
-      }
-    }
-    `;
-
-    const result = convertEsModule(code).code;
-    expect(result).toMatchSnapshot();
-  });
-
-  it("can handle class properties and named imports with same name", () => {
-    const code = `
-    import React__default from "react";
-
-    class Something {
-      React_default;
-
-      constructor() {
-        this.React_default = 'react';
-      }
-
-      test() {
-        this.React_default = 'another-react';
-      }
-    }
-    `;
-
-    const result = convertEsModule(code).code;
-    expect(result).toMatchSnapshot();
-  });
-
-  it("can handle function arguments and imports with same name", () => {
-    const code = `
-    import * as Lodash from "lodash";
-
-    function doSomething(Lodash) {
-      return Lodash.flatten([]);
-    }
-    `;
-
-    const result = convertEsModule(code).code;
+    const result = convertEsModule(code);
     expect(result).toMatchSnapshot();
   });
 });
