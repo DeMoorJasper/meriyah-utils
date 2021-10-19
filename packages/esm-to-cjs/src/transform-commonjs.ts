@@ -1,5 +1,5 @@
 import * as meriyah from "meriyah";
-import { walk, simpleWalk } from "@meriyah-utils/walker";
+import { simpleWalk } from "@meriyah-utils/walker";
 import { NodeTypes as n } from "@meriyah-utils/types";
 import * as escope from "escope";
 
@@ -559,21 +559,22 @@ export function transformCommonJS(program: meriyah.ESTree.Program) {
   ) {
     // Convert all the object shorthands to not shorthands, needed later when we rename variables so we
     // don't change to the key literals
-    walk(program, {
-      enter(node, parent, prop, index) {
-        if (node.type === n.Property) {
-          const property = node as meriyah.ESTree.Property;
-          if (
-            property.shorthand &&
-            property.value.type !== n.AssignmentPattern // Not a default initializer
-          ) {
-            property.value = {
-              ...property.key,
-            };
-            property.shorthand = false;
-          }
+    simpleWalk(program, (node) => {
+      if (node.type === n.Property) {
+        const property = node as meriyah.ESTree.Property;
+        if (
+          property.shorthand &&
+          property.value.type !== n.AssignmentPattern // Not a default initializer
+        ) {
+          property.value = {
+            ...property.key,
+          };
+          property.shorthand = false;
         }
-      },
+
+        // Skip child nodes
+        return true;
+      }
     });
 
     // A second pass where we rename all references to imports that were marked before.
