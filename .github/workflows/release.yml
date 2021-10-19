@@ -18,6 +18,10 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm whoami
+      - name: Setup | Configure git user
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
       - name: Prepare | Lerna Version
         run: yarn lerna version --create-release github --yes
         env:
