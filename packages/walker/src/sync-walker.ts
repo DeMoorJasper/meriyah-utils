@@ -10,11 +10,12 @@ export type SyncHandler = (
 ) => void;
 
 export class SyncWalker extends WalkerBase {
-  enter: SyncHandler;
-  leave: SyncHandler;
+  enter?: SyncHandler | null;
+  leave?: SyncHandler | null;
 
-  constructor(enter: SyncHandler, leave: SyncHandler) {
+  constructor(enter?: SyncHandler | null, leave?: SyncHandler | null) {
     super();
+    
     this.enter = enter;
     this.leave = leave;
   }

@@ -1,5 +1,5 @@
 {
-  "name": "@meriyah-utils/cjs-dependency-collector",
+  "name": "@meriyah-utils/esm-to-cjs",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "src/index.ts",
@@ -16,11 +16,12 @@
     "build": "tsc -b tsconfig.build.json"
   },
   "dependencies": {
+    "@meriyah-utils/types": "^1.0.0",
     "@meriyah-utils/walker": "^1.0.0",
-    "@meriyah-utils/types": "^1.0.0"
+    "escope": "^3.6.0",
+    "is-reference": "^3.0.0"
   },
   "devDependencies": {
-    "meriyah": "^4.2.0",
-    "@meriyah-utils/printer": "^1.0.0"
+    "meriyah": "^4.2.0"
   }
 }
