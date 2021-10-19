@@ -571,9 +571,6 @@ export function transformCommonJS(program: meriyah.ESTree.Program) {
           };
           property.shorthand = false;
         }
-
-        // Skip child nodes
-        return true;
       }
     });
 

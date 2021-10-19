@@ -640,20 +640,37 @@ export function test3() {
     expect(result).toMatchSnapshot();
   });
 
-  // TODO: Make this work...
-  // it("can handle class properties and named imports with same name", () => {
-  //   const code = `
-  //   import React__default from "react";
+  it("can handle class properties and named imports with same name", () => {
+    const code = `
+    import React__default from "react";
 
-  //   var VisualElementHandler = (function (_super) {
-  //     return VisualElementHandler;
-  //   })(React__default.Component);
-  //   `;
+    class Something {
+      React_default;
 
-  //   // Should not transpile React__default.Component to (0, React__default.Component)
+      constructor() {
+        this.React_default = 'react';
+      }
 
-  //   const result = convertEsModule(code).code;
-  //   console.log(result);
-  //   expect(result).toMatchSnapshot();
-  // });
+      test() {
+        this.React_default = 'another-react';
+      }
+    }
+    `;
+
+    const result = convertEsModule(code).code;
+    expect(result).toMatchSnapshot();
+  });
+
+  it("can handle function arguments and imports with same name", () => {
+    const code = `
+    import * as Lodash from "lodash";
+
+    function doSomething(Lodash) {
+      return Lodash.flatten([]);
+    }
+    `;
+
+    const result = convertEsModule(code).code;
+    expect(result).toMatchSnapshot();
+  });
 });

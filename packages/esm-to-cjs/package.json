@@ -18,8 +18,7 @@
   "dependencies": {
     "@meriyah-utils/types": "^1.0.0",
     "@meriyah-utils/walker": "^1.0.0",
-    "escope": "^3.6.0",
-    "is-reference": "^3.0.0"
+    "escope": "^3.6.0"
   },
   "devDependencies": {
     "meriyah": "^4.2.0"
