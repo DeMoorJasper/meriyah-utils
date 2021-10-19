@@ -4,7 +4,7 @@ Transforms ESModules to CommonJS.
 
 ## Benchmark
 
-Transpiling big-file:
+Transpiling framer:
 
 Before: 165-360ms
 After: ...

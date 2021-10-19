@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 import * as meriyah from "meriyah";
 import { generate as generateCode } from "@meriyah-utils/printer";
 import { convertEsModule as convert } from "../src/index";
@@ -395,7 +395,10 @@ describe("convert-esmodule", () => {
 
   it("Has good performance", () => {
     /* eslint-disable */
-    const code = fs.readFileSync(path.join(__dirname, 'fixtures/framer.js'), 'utf-8');
+    const code = fs.readFileSync(
+      path.join(__dirname, "fixtures/framer.js"),
+      "utf-8"
+    );
     for (let i = 0; i < 5; i++) {
       const t = Date.now();
       const ast = parseModule(code);

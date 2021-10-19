@@ -1,5 +1,5 @@
 import * as meriyah from "meriyah";
-import { walk } from "@meriyah-utils/walker";
+import { walk, simpleWalk } from "@meriyah-utils/walker";
 import { NodeTypes as n } from "@meriyah-utils/types";
 import * as escope from "escope";
 
@@ -136,36 +136,29 @@ export function transformCommonJS(program: meriyah.ESTree.Program) {
   // variable as it's a reserved keyword
   let exportsDefined = false;
 
-  walk(program, {
-    enter(node, parent) {
-      if (node.type === n.VariableDeclaration) {
-        // We don't rename exports vars in functions, only on root level
-        if (
-          parent &&
-          parent.type === n.BlockStatement &&
-          exportsDefined === false
-        ) {
-          this.skip();
-        }
-      } else if (node.type === n.VariableDeclarator) {
-        const declNode = node as meriyah.ESTree.VariableDeclarator;
-        if (
-          declNode.id.type === n.Identifier &&
-          declNode.id.name === "exports"
-        ) {
-          exportsDefined = true;
-        }
-      } else if (node.type === n.Identifier && exportsDefined) {
-        const idNode = node as meriyah.ESTree.Identifier;
-        if (idNode.name === "exports") {
-          idNode.name = "__$csb_exports";
-          this.replace(idNode);
-        }
-      } else if (!exportsDefined && parent != null) {
-        // Skip, we don't need to go deeper now
-        this.skip();
+  simpleWalk(program, (node, parent) => {
+    if (node.type === n.VariableDeclaration) {
+      // We don't rename exports vars in functions, only on root level
+      if (
+        parent &&
+        parent.type === n.BlockStatement &&
+        exportsDefined === false
+      ) {
+        return true;
       }
-    },
+    } else if (node.type === n.VariableDeclarator) {
+      const declNode = node as meriyah.ESTree.VariableDeclarator;
+      if (declNode.id.type === n.Identifier && declNode.id.name === "exports") {
+        exportsDefined = true;
+      }
+    } else if (node.type === n.Identifier && exportsDefined) {
+      if (node.name === "exports") {
+        node.name = "__$csb_exports";
+      }
+    } else if (!exportsDefined && parent != null) {
+      // Skip, we don't need to go deeper now
+      return true;
+    }
   });
 
   for (; i < program.body.length; i++) {
