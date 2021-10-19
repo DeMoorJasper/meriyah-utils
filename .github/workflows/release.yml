@@ -18,5 +18,7 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
       - run: npm whoami
-      - name: Release
-        run: npm publish
+      - name: Prepare | Lerna Version
+        run: yarn lerna version --create-release github --yes
+      - name: Release | Lerna Publish
+        run: lerna publish from-package --yes
